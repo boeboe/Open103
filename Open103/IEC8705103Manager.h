@@ -456,8 +456,8 @@ class IEC8705103Manager {
       case TrasformerDifferentialProtection:
         if (Command == 18 || Command == 19) break;
       default:
-        TRACEENDL("This protection does not support current function");
-        return false;
+        // The FUN column of table 17 lists typical function types, not mandatory ones (clause 7.2.5.2).
+        TRACEENDL("Command is not typical for this protection function type");
         break;
     }
 
