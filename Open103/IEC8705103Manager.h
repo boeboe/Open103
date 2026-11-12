@@ -965,7 +965,9 @@ class IEC8705103Manager {
 
     this->DCurrent.ChannelList.Channels[tmp->ACC].Header.ACC = tmp->ACC;
     this->DCurrent.ChannelList.Channels[tmp->ACC].Header.NDV = tmp->NDV;
-    this->DCurrent.ChannelList.Channels[tmp->ACC].Header.NFE = tmp->NFE;
+    // NFE follows NDV at octet 5. ASDU30 is not packed, so tmp->NFE would be read from octets 6 and 7.
+    const unsigned char *t = static_cast<const unsigned char *>(pAsdu);
+    this->DCurrent.ChannelList.Channels[tmp->ACC].Header.NFE = (((unsigned short)t[6]) << 8) | t[5];
     this->DCurrent.ChannelList.Channels[tmp->ACC].Header.TOV = tmp->TOV;
 
     SkipBytes(&pAsdu, 7);
